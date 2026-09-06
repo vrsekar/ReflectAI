@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { UserInteraction, ReflectionMode } from '../types';
-import { Plus, Search, Trash2, Calendar, MessageSquare, BookOpen, Brain, Sparkles, AlertCircle } from 'lucide-react';
+import { Plus, Search, Trash2, Calendar, MessageSquare, BookOpen, Brain, Sparkles, AlertCircle, MapPin } from 'lucide-react';
 
 interface HistorySidebarProps {
   interactions: UserInteraction[];
@@ -167,6 +167,13 @@ export const HistorySidebar: React.FC<HistorySidebarProps> = ({
                 <p className="text-[11px] text-stone-500 line-clamp-2 mt-1.5 leading-snug">
                   {item.prompt}
                 </p>
+
+                {item.location && (
+                  <div className="mt-1.5 flex items-center space-x-1 text-[10px] text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md font-medium w-fit max-w-full">
+                    <MapPin className="h-3 w-3 shrink-0 text-emerald-600" />
+                    <span className="truncate">{item.location.name || 'Pinned Location'}</span>
+                  </div>
+                )}
 
                 <div className="flex items-center justify-between mt-2 pt-2 border-t border-stone-100 text-[10px] text-stone-400">
                   <span className="flex items-center space-x-1">

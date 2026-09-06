@@ -93,7 +93,21 @@ service cloud.firestore {
                 <Key className="h-3.5 w-3.5 text-amber-600" />
                 <span>Server-Side Secret Isolation</span>
               </div>
-              <p className="text-stone-500">Gemini API keys remain strictly in server environment memory. No client-side exposure.</p>
+              <p className="text-stone-500">Gemini & Maps API keys remain strictly in server environment memory. No client-side exposure.</p>
+            </div>
+            <div className="p-3 rounded-lg border border-stone-200 bg-white sm:col-span-2">
+              <div className="flex items-center space-x-1.5 font-medium text-stone-800 mb-1">
+                <Server className="h-3.5 w-3.5 text-sky-600" />
+                <span>Google Maps API Security & Pattern A Architecture</span>
+              </div>
+              <p className="text-stone-500">All geocoding and location queries route through server-side proxies (`/api/maps/*`) with essential-field filtering, 24-hour in-memory TTL caching, and zero client-side credential exposure.</p>
+            </div>
+            <div className="p-3 rounded-lg border border-stone-200 bg-white sm:col-span-2">
+              <div className="flex items-center space-x-1.5 font-medium text-stone-800 mb-1">
+                <ShieldCheck className="h-3.5 w-3.5 text-[#0a66c2]" />
+                <span>LinkedIn Integration & OAuth 2.0 Security Architecture</span>
+              </div>
+              <p className="text-stone-500">Server-side OAuth 2.0 authorization code exchange with cryptographic state verification, HTTP-Only SameSite/Secure cookies for AI Studio iframe compatibility, minimal scopes (<code className="bg-stone-100 px-1 py-0.5 rounded text-stone-700">w_member_social</code>, <code className="bg-stone-100 px-1 py-0.5 rounded text-stone-700">openid</code>, <code className="bg-stone-100 px-1 py-0.5 rounded text-stone-700">profile</code>), and exponential backoff retry for rate limiting.</p>
             </div>
           </div>
         </div>

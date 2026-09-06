@@ -1,9 +1,15 @@
 import React, { useState } from 'react';
-import { ReflectionMode } from '../types';
+import { ReflectionMode, JournalLocation } from '../types';
 import { Sparkles, BookOpen, Brain, MessageSquare, Send, RefreshCw, AlertTriangle, Lightbulb } from 'lucide-react';
+import { LocationPicker } from './LocationPicker';
 
 interface JournalEditorProps {
-  onSubmit: (title: string, prompt: string, mode: ReflectionMode) => Promise<void>;
+  onSubmit: (
+    title: string,
+    prompt: string,
+    mode: ReflectionMode,
+    location: JournalLocation | null
+  ) => Promise<void>;
   isLoading: boolean;
   error: string | null;
   onRetry: () => void;
@@ -25,6 +31,7 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({
   const [title, setTitle] = useState('');
   const [prompt, setPrompt] = useState('');
   const [mode, setMode] = useState<ReflectionMode>('reflection');
+  const [location, setLocation] = useState<JournalLocation | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -32,7 +39,7 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({
 
     // Use user-provided title or generate a fallback from first few words
     const computedTitle = title.trim() || prompt.trim().slice(0, 50) + (prompt.length > 50 ? '...' : '');
-    await onSubmit(computedTitle, prompt.trim(), mode);
+    await onSubmit(computedTitle, prompt.trim(), mode, location);
   };
 
   const handleSelectStarter = (text: string) => {
@@ -202,6 +209,18 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({
             maxLength={10000}
             required
             className="w-full p-4 text-sm rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-stone-400 bg-white leading-relaxed resize-y font-sans"
+          />
+        </div>
+
+        {/* Location Pinning Section */}
+        <div className="pt-1">
+          <label className="block text-xs font-medium text-stone-700 mb-1">
+            Pin Location to Journal Entry (Optional)
+          </label>
+          <LocationPicker
+            location={location}
+            onChange={setLocation}
+            disabled={isLoading}
           />
         </div>
 

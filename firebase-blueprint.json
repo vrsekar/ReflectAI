@@ -37,6 +37,18 @@
           "type": "array",
           "description": "List of multi-turn conversation messages"
         },
+        "location": {
+          "type": "object",
+          "description": "Pinned geographic location coordinates and address for the journal entry",
+          "properties": {
+            "latitude": { "type": "number" },
+            "longitude": { "type": "number" },
+            "name": { "type": "string" },
+            "address": { "type": "string" },
+            "placeId": { "type": "string" }
+          },
+          "required": ["latitude", "longitude"]
+        },
         "createdAt": {
           "type": "string",
           "description": "Timestamp when the interaction was created"

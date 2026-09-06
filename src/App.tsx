@@ -6,7 +6,7 @@ import {
   subscribeToUserInteractions,
   deleteInteraction,
 } from './lib/firestoreService';
-import { UserInteraction, ReflectionMode, ConversationTurn } from './types';
+import { UserInteraction, ReflectionMode, ConversationTurn, JournalLocation } from './types';
 import { Navbar } from './components/Navbar';
 import { LandingHero } from './components/LandingHero';
 import { HistorySidebar } from './components/HistorySidebar';
@@ -30,6 +30,7 @@ export default function App() {
     title: string;
     prompt: string;
     mode: ReflectionMode;
+    location?: JournalLocation | null;
   } | null>(null);
 
   const [isSecurityModalOpen, setIsSecurityModalOpen] = useState(false);
@@ -105,7 +106,8 @@ export default function App() {
   const handleCreateInteraction = async (
     title: string,
     prompt: string,
-    mode: ReflectionMode
+    mode: ReflectionMode,
+    location?: JournalLocation | null
   ) => {
     if (!user) {
       setError('You must be signed in to reflect and save entries.');
@@ -114,7 +116,7 @@ export default function App() {
 
     setIsLoadingAI(true);
     setError(null);
-    setLastFailedDraft({ title, prompt, mode });
+    setLastFailedDraft({ title, prompt, mode, location });
 
     try {
       // Call server-side Express endpoint (protects GEMINI_API_KEY from browser)
@@ -140,6 +142,7 @@ export default function App() {
         response: data.response || 'No response generated.',
         mode,
         turns: [],
+        ...(location ? { location } : {}),
         createdAt: nowIso,
         updatedAt: nowIso,
       };
@@ -315,7 +318,8 @@ export default function App() {
                     handleCreateInteraction(
                       lastFailedDraft.title,
                       lastFailedDraft.prompt,
-                      lastFailedDraft.mode
+                      lastFailedDraft.mode,
+                      lastFailedDraft.location
                     );
                   }
                 }}

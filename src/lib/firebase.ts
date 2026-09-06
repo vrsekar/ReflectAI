@@ -62,7 +62,10 @@ export function cleanPayload<T>(obj: T): T {
     return obj;
   }
   return JSON.parse(
-    JSON.stringify(obj, (_, value) => (value === undefined ? null : value))
+    JSON.stringify(obj, (key, value) => {
+      if (value === undefined) return undefined;
+      return value;
+    })
   );
 }
 

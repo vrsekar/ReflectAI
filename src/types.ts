@@ -6,6 +6,14 @@ export interface ConversationTurn {
   timestamp: string;
 }
 
+export interface JournalLocation {
+  latitude: number;
+  longitude: number;
+  name?: string;
+  address?: string;
+  placeId?: string;
+}
+
 export interface UserInteraction {
   id: string;
   userId: string;
@@ -14,6 +22,7 @@ export interface UserInteraction {
   response: string;
   mode: ReflectionMode;
   turns: ConversationTurn[];
+  location?: JournalLocation;
   createdAt: string;
   updatedAt: string;
 }
@@ -42,4 +51,35 @@ export interface FirestoreErrorInfo {
       email?: string | null;
     }[];
   };
+}
+
+export interface LinkedInProfile {
+  sub: string;
+  name: string;
+  email?: string;
+  picture?: string;
+  given_name?: string;
+  family_name?: string;
+}
+
+export interface LinkedInStatus {
+  isConnected: boolean;
+  profile: LinkedInProfile | null;
+  configured: boolean;
+}
+
+export interface LinkedInShareRequest {
+  commentary: string;
+  title?: string;
+  prompt?: string;
+  response?: string;
+  location?: JournalLocation;
+  tags?: string[];
+}
+
+export interface LinkedInShareResponse {
+  success: boolean;
+  postId?: string;
+  postUrl?: string;
+  error?: string;
 }

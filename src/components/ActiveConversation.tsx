@@ -14,7 +14,11 @@ import {
   AlertCircle,
   Copy,
   Check,
+  MapPin,
+  Share2,
 } from 'lucide-react';
+import { LocationPreviewMap } from './LocationPreviewMap';
+import { LinkedInShareModal } from './LinkedInShareModal';
 
 interface ActiveConversationProps {
   interaction: UserInteraction;
@@ -40,6 +44,7 @@ export const ActiveConversation: React.FC<ActiveConversationProps> = ({
 }) => {
   const [inputText, setInputText] = useState('');
   const [copied, setCopied] = useState(false);
+  const [isLinkedInModalOpen, setIsLinkedInModalOpen] = useState(false);
   const turnsEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -86,7 +91,7 @@ export const ActiveConversation: React.FC<ActiveConversationProps> = ({
       {/* Session Title & Metadata Bar */}
       <div className="border-b border-stone-200 pb-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="space-y-1">
-          <div className="flex items-center space-x-2">
+          <div className="flex flex-wrap items-center gap-2">
             <span className="capitalize px-2.5 py-0.5 rounded-full text-xs font-medium bg-stone-100 text-stone-700 border border-stone-200">
               {interaction.mode}
             </span>
@@ -94,6 +99,12 @@ export const ActiveConversation: React.FC<ActiveConversationProps> = ({
               <Calendar className="h-3 w-3" />
               <span>{formatDate(interaction.createdAt)}</span>
             </span>
+            {interaction.location && (
+              <span className="text-xs text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full font-medium flex items-center space-x-1">
+                <MapPin className="h-3 w-3 text-emerald-600 shrink-0" />
+                <span className="truncate max-w-[200px]">{interaction.location.name}</span>
+              </span>
+            )}
           </div>
           <h1 className="text-2xl sm:text-3xl font-serif text-stone-900 leading-tight">
             {interaction.title || 'Untitled Reflection'}
@@ -101,6 +112,16 @@ export const ActiveConversation: React.FC<ActiveConversationProps> = ({
         </div>
 
         <div className="flex items-center space-x-2">
+          <button
+            id="share-to-linkedin-header-btn"
+            onClick={() => setIsLinkedInModalOpen(true)}
+            className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-lg border border-[#0a66c2]/30 bg-[#0a66c2]/5 text-xs font-medium text-[#0a66c2] hover:bg-[#0a66c2]/10 transition-colors cursor-pointer shadow-2xs"
+            title="Share this reflection and Gemini AI insights to LinkedIn"
+          >
+            <Share2 className="h-3.5 w-3.5" />
+            <span>Share to LinkedIn</span>
+          </button>
+
           <button
             onClick={handleCopyEntry}
             className="inline-flex items-center space-x-1 px-3 py-1.5 rounded-lg border border-stone-200 text-xs font-medium text-stone-600 hover:bg-stone-100 transition-colors cursor-pointer"
@@ -137,6 +158,13 @@ export const ActiveConversation: React.FC<ActiveConversationProps> = ({
           <div className="text-sm text-stone-800 whitespace-pre-wrap leading-relaxed font-sans">
             {interaction.prompt}
           </div>
+
+          {/* Render Location Preview Map if entry has pinned location */}
+          {interaction.location && (
+            <div className="pt-2">
+              <LocationPreviewMap location={interaction.location} />
+            </div>
+          )}
         </div>
 
         {/* Gemini AI Initial Reflection */}
@@ -275,6 +303,13 @@ export const ActiveConversation: React.FC<ActiveConversationProps> = ({
           <span>Press Send to continue the thread</span>
         </div>
       </form>
+
+      {/* LinkedIn Share Modal */}
+      <LinkedInShareModal
+        isOpen={isLinkedInModalOpen}
+        onClose={() => setIsLinkedInModalOpen(false)}
+        interaction={interaction}
+      />
     </div>
   );
 };
