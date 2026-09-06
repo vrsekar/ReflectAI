@@ -1,0 +1,58 @@
+{
+  "entities": {
+    "Interaction": {
+      "title": "Interaction",
+      "description": "A user's journal reflection, brainstorm, or multi-turn conversation with Gemini AI",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the interaction"
+        },
+        "userId": {
+          "type": "string",
+          "description": "The authenticated owner UID of the interaction"
+        },
+        "title": {
+          "type": "string",
+          "description": "A short, descriptive title for the reflection session",
+          "maxLength": 200
+        },
+        "prompt": {
+          "type": "string",
+          "description": "Initial user journal entry or reflection prompt",
+          "maxLength": 10000
+        },
+        "response": {
+          "type": "string",
+          "description": "Gemini AI generated response, summary, or reflection",
+          "maxLength": 20000
+        },
+        "mode": {
+          "type": "string",
+          "description": "Mode of AI interaction: reflection, brainstorm, summary, or conversation",
+          "enum": ["reflection", "brainstorm", "summary", "conversation"]
+        },
+        "turns": {
+          "type": "array",
+          "description": "List of multi-turn conversation messages"
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp when the interaction was created"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Timestamp when the interaction was last updated"
+        }
+      },
+      "required": ["id", "userId", "title", "prompt", "response", "mode", "createdAt", "updatedAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}/interactions/{interactionId}": {
+      "schema": "Interaction",
+      "description": "User-isolated collection of journal entries and AI reflections"
+    }
+  }
+}
